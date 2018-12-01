@@ -48,8 +48,21 @@ account resource consumption more realistic.
 
 ### Goals <a name="goals"></a>
 
-* Implement per-user and per-group `limit` and `request`
-* Implement request cost estimation
+Following questions should be clarified:
+
+* API call cost computation
+    * API call cost measurement unit (`token`)
+    * pagination rules for `list` API calls
+    * how does the party defining the inflightlimit objects know what the server capacity is?
+    * should we care about "in-flight" requests or qps?
+* Map clients to buckets and assign qoutas to buckets
+    * how does the sysadmin set quotas
+    * how to fairly share tokens if a request can be mapped to multiple buckets
+* how does apiserver enforce those limits
+    * how several apiservers replicas affects overall API call capacity
+    * how to balance client's requests and pool quota across apiservers
+    * request rejecting, cheap enough to reject 10-100x as many requests as we serve
+    * 2-tier approach quota distribution: mechanism, pros and cons
 
 ## Proposal <a name="proposal"></a>
 
